@@ -1,9 +1,9 @@
 package com.dejected;
 
+import com.dejected.block.Block;
 import com.dejected.exception.InValidMoveException;
 import com.dejected.exception.NoSoldierPresentException;
 import com.dejected.player.Player;
-import com.dejected.player.PlayerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,8 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
-        Player playerWhite = new Player(PlayerType.WHITE, "Pankaj");
-        Player playerBlack = new Player(PlayerType.BLACK, "Goku");
+        Player playerWhite = new Player(Player.PlayerType.WHITE, "Pankaj");
+        Player playerBlack = new Player(Player.PlayerType.BLACK, "Goku");
 
         ChessBoard chessBoard = new ChessBoard(playerWhite, playerBlack);
 
@@ -51,13 +51,7 @@ public class Main {
     private static Block getBlockForInputString(String s) {
         int row = s.charAt(0) - 'A' + 1;
         int column = s.charAt(1) - '0';
-        BlockType blockType;
-        if ((row + column) % 2 == 1) {
-            blockType = BlockType.WHITE;
-        } else {
-            blockType = BlockType.BLACK;
-        }
-        Block block = new Block(row, column, blockType);
+        Block block = new Block(row, column);
         return block;
     }
 

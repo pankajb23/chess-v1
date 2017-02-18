@@ -1,4 +1,6 @@
-package com.dejected;
+package com.dejected.block;
+
+import com.dejected.soldiers.Soldier;
 
 /**
  * Created on 04/02/17 by dark magic.
@@ -6,13 +8,17 @@ package com.dejected;
 public class Block {
     private final int rowCount;
     private final int columnCount;
+    private final BlockType blockType;
+    private Soldier soldier;
 
     public Block(int rowCount, int columnCount) {
-        assert rowCount > 0 && rowCount < 9;
-        assert columnCount > 0 && columnCount < 9;
+        assert rowCount >= 0 && rowCount < 8;
+        assert columnCount >= 0 && columnCount < 8;
 
         this.rowCount = rowCount;
         this.columnCount = columnCount;
+
+        this.blockType = (this.rowCount + this.columnCount) % 2 == 1 ? BlockType.WHITE : BlockType.WHITE;
     }
 
     public int getRowCount() {
@@ -21,6 +27,10 @@ public class Block {
 
     public int getColumnCount() {
         return columnCount;
+    }
+
+    public BlockType getBlockType() {
+        return blockType;
     }
 
     @Override
@@ -48,5 +58,18 @@ public class Block {
         int result = rowCount;
         result = 31 * result + columnCount;
         return result;
+    }
+
+    public Soldier getSoldier() {
+        return soldier;
+    }
+
+    public void setSoldier(Soldier soldier) {
+        this.soldier = soldier;
+    }
+
+    public enum BlockType {
+        WHITE,
+        BLACK
     }
 }

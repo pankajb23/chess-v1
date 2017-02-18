@@ -8,18 +8,18 @@ import com.dejected.soldiers.Soldier;
 /**
  * Created on 04/02/17 by dark magic.
  */
-public class King implements Soldier {
+public class Bishop implements Soldier {
     private final Player.PlayerType playerType;
-    private Move moves;
+    private final Move move;
 
-    public King(Player.PlayerType playerType, Move moves) {
+    public Bishop(Player.PlayerType playerType, Move move) {
         this.playerType = playerType;
-        this.moves = moves;
+        this.move = move;
     }
 
     @Override
-    public boolean canMoveTo(Block toBlock, Block[][] blocks, Block fromBlock) {
-        return moves.canMoveToFrom(toBlock, blocks, fromBlock);
+    public boolean canMoveTo(Block block, Block[][] blocks, Block fromBlock) {
+        return move.canMoveToFrom(block, blocks, fromBlock);
     }
 
     @Override

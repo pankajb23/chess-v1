@@ -1,33 +1,28 @@
 package com.dejected.soldiers.impl;
 
-import com.dejected.Block;
-import com.dejected.player.PlayerType;
+import com.dejected.block.Block;
+import com.dejected.moves.Move;
+import com.dejected.player.Player;
 import com.dejected.soldiers.Soldier;
 
 /**
  * Created on 04/02/17 by dark magic.
  */
 public class Queen implements Soldier {
-    private final PlayerType playerType;
-    private Block currentBlock;
+    private final Player.PlayerType playerType;
+    private final Move move;
 
-    public Queen(Block currentBlock, PlayerType playerType) {
+    public Queen(Player.PlayerType playerType, Move move) {
         this.playerType = playerType;
-        this.currentBlock = currentBlock;
+        this.move = move;
     }
 
     @Override
-    public boolean canMoveTo(Block block) {
-        return false;
+    public boolean canMoveTo(Block toBlock, Block[][] blocks, Block fromBlock) {
+        return move.canMoveToFrom(toBlock, blocks, fromBlock);
     }
-
     @Override
-    public void moveToBlock(Block block) {
-
-    }
-
-    @Override
-    public Block currentPosition() {
-        return this.currentBlock;
+    public Player.PlayerType getPlayerType() {
+        return playerType;
     }
 }

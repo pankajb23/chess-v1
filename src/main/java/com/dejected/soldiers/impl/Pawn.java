@@ -1,31 +1,29 @@
 package com.dejected.soldiers.impl;
 
-import com.dejected.Block;
-import com.dejected.player.PlayerType;
+import com.dejected.block.Block;
+import com.dejected.moves.Move;
+import com.dejected.player.Player;
 import com.dejected.soldiers.Soldier;
 
 /**
  * Created on 04/02/17 by dark magic.
  */
 public class Pawn implements Soldier {
-    private Block currentBlock;
-    private final PlayerType playerType;
+    private final Player.PlayerType playerType;
+    private final Move move;
 
-    public Pawn(Block currentBlock, PlayerType playerType) {
-        this.currentBlock = currentBlock;
+    public Pawn(Player.PlayerType playerType, Move move) {
         this.playerType = playerType;
+        this.move = move;
     }
 
     @Override
-    public boolean canMoveTo(Block block) {return false; }
-
-    @Override
-    public void moveToBlock(Block block) {
-        this.currentBlock = block;
+    public boolean canMoveTo(Block toBlock, Block[][] blocks, Block fromBlock) {
+        return move.canMoveToFrom(toBlock, blocks, fromBlock);
     }
 
     @Override
-    public Block currentPosition() {
-        return this.currentBlock;
+    public Player.PlayerType getPlayerType() {
+        return playerType;
     }
 }
