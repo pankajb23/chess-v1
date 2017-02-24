@@ -14,7 +14,8 @@ public class StraightMoves implements Move {
 
     @Override
     public boolean canMoveToFrom(Block toBlock, Block[][] blocks, Block fromBlock) {
-        if (toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType()) return false;
+        if (toBlock.getSoldier() != null && toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType())
+            return false;
 
         if (isOnHorizontalBlock(toBlock, fromBlock) || isOnVerticalBlock(toBlock, fromBlock)) {
             return canMoveOnVertical(toBlock, blocks, fromBlock) || canMoveHorizontal(toBlock, blocks, fromBlock);
@@ -26,17 +27,6 @@ public class StraightMoves implements Move {
     private boolean canMoveOnVertical(Block toBlock, Block[][] blocks, Block fromBlock) {
         if (!isOnVerticalBlock(toBlock, fromBlock)) return false;
 
-        int multiplier = toBlock.getColumnCount() > fromBlock.getColumnCount() ? 1 : -1;
-        for (int col = fromBlock.getColumnCount() + multiplier; col != toBlock.getColumnCount(); col += multiplier) {
-            Block bl = blocks[fromBlock.getRowCount()][col];
-            if (bl.getSoldier() != null) return false;
-        }
-        return true;
-    }
-
-    private boolean canMoveHorizontal(Block toBlock, Block[][] blocks, Block fromBlock) {
-        if (!isOnHorizontalBlock(toBlock, fromBlock)) return false;
-
         int multiplier = toBlock.getRowCount() > fromBlock.getRowCount() ? 1 : -1;
         for (int row = fromBlock.getRowCount() + multiplier; row != toBlock.getRowCount(); row += multiplier) {
             Block bl = blocks[row][fromBlock.getColumnCount()];
@@ -45,12 +35,28 @@ public class StraightMoves implements Move {
         return true;
     }
 
+    private boolean canMoveHorizontal(Block toBlock, Block[][] blocks, Block fromBlock) {
+        if (!isOnHorizontalBlock(toBlock, fromBlock)) return false;
+
+        int multiplier = toBlock.getColumnCount() > fromBlock.getColumnCount() ? 1 : -1;
+        for (int col = fromBlock.getColumnCount() + multiplier; col != toBlock.getColumnCount(); col += multiplier) {
+            Block bl = blocks[fromBlock.getRowCount()][col];
+            if (bl.getSoldier() != null) return false;
+        }
+
+        return true;
+    }
+
     private boolean isOnVerticalBlock(Block toBlock, Block fromBlock) {
-        return (toBlock.getRowCount() != fromBlock.getRowCount()) && toBlock.getColumnCount() == fromBlock.getColumnCount();
+        return (toBlock.getRowCount() != fromBlock.getRowCount())
+                && toBlock.getColumnCount() == fromBlock.getColumnCount()
+                && Math.abs(toBlock.getRowCount() - fromBlock.getRowCount()) <= displaceMent;
     }
 
     private boolean isOnHorizontalBlock(Block toBlock, Block fromBlock) {
-        return (toBlock.getRowCount() == fromBlock.getRowCount()) && toBlock.getColumnCount() != fromBlock.getColumnCount();
+        return (toBlock.getRowCount() == fromBlock.getRowCount())
+                && toBlock.getColumnCount() != fromBlock.getColumnCount()
+                && Math.abs(toBlock.getColumnCount() - fromBlock.getColumnCount()) <= displaceMent;
     }
 
 }

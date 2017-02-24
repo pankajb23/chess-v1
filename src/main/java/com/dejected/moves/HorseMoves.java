@@ -8,7 +8,8 @@ import com.dejected.block.Block;
 public class HorseMoves implements Move {
     @Override
     public boolean canMoveToFrom(Block toblock, Block[][] blocks, Block fromBlock) {
-        if (toblock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType()) return false;
+        if (toblock.getSoldier() != null && toblock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType())
+            return false;
 
         int rowDiff = Math.abs(toblock.getRowCount() - fromBlock.getRowCount());
         int colDiff = Math.abs(toblock.getColumnCount() - fromBlock.getColumnCount());

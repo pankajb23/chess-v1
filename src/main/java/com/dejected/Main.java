@@ -2,6 +2,7 @@ package com.dejected;
 
 import com.dejected.block.Block;
 import com.dejected.exception.InValidMoveException;
+import com.dejected.exception.KingCheckException;
 import com.dejected.exception.NoSoldierPresentException;
 import com.dejected.player.Player;
 import org.slf4j.Logger;
@@ -28,29 +29,33 @@ public class Main {
         int playerTurn = 0;
         while ((input = buff.readLine()) != null) {
             String[] a = input.split(" ");
-            if (checkInput(a)) {
+            if (a[0].equalsIgnoreCase("PB")) {
+                chessBoard.printBoard();
+            } else if (!checkInput(a)) {
                 System.out.println("Wrong input ---------");
                 System.out.println("Input should be in Format :- A1 B1");
             } else {
                 try {
                     if (playerTurn % 2 == 0) {
-                        chessBoard.moveWhitePlayer(getBlockForInputString(a[0]), getBlockForInputString(a[1]));
+                        chessBoard.playerMove(getBlockForInputString(a[0]), getBlockForInputString(a[1]), Player.PlayerType.WHITE);
                     } else {
-                        chessBoard.moveBlackPlayer(getBlockForInputString(a[0]), getBlockForInputString(a[1]));
+                        chessBoard.playerMove(getBlockForInputString(a[0]), getBlockForInputString(a[1]), Player.PlayerType.BLACK);
                     }
                     playerTurn++;
                 } catch (NoSoldierPresentException ex) {
                     LOG.info("InValid move {}", ex);
                 } catch (InValidMoveException ex) {
                     LOG.info("Soldier cann't move to the place ");
+                } catch (KingCheckException ex) {
+                    LOG.info("Your king getting checked");
                 }
             }
         }
     }
 
     private static Block getBlockForInputString(String s) {
-        int row = s.charAt(0) - 'A' + 1;
-        int column = s.charAt(1) - '0';
+        int row = s.charAt(0) - 'A';
+        int column = s.charAt(1) - '1';
         Block block = new Block(row, column);
         return block;
     }

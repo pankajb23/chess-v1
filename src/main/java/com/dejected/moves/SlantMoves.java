@@ -14,39 +14,37 @@ public class SlantMoves implements Move {
 
     @Override
     public boolean canMoveToFrom(Block toBlock, Block[][] blocks, Block fromBlock) {
-        if (toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType()) return false;
+        if (toBlock.getSoldier() != null && toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType())
+            return false;
         if (isOnSlant(toBlock, fromBlock)) {
-            return canMoveOnLeftSlant(toBlock, blocks, fromBlock) || canMoveOnRightSlant(toBlock, blocks, fromBlock);
+            return canMoveOnSlant(toBlock, blocks, fromBlock);
         }
         return false;
     }
 
-    private boolean canMoveOnRightSlant(Block block, Block[][] blocks, Block fromBlock) {
-        if (!(block.getColumnCount() - fromBlock.getColumnCount() == block.getRowCount() - fromBlock.getRowCount()))
+
+    private boolean canMoveOnSlant(Block toBlock, Block[][] blocks, Block fromBlock) {
+        if ((toBlock.getColumnCount() - fromBlock.getColumnCount() != fromBlock.getRowCount() - toBlock.getRowCount())
+                && (toBlock.getColumnCount() - fromBlock.getColumnCount() != toBlock.getRowCount() - fromBlock.getRowCount()))
             return false;
 
-        int multiplier = block.getColumnCount() > fromBlock.getColumnCount() ? 1 : -1;
-        for (int index = multiplier; index != (block.getColumnCount() - fromBlock.getColumnCount()); index += multiplier) {
-            int row = fromBlock.getRowCount() + index;
-            int col = fromBlock.getColumnCount() + index;
+        int diffX = getDiffX(toBlock, fromBlock);
+        int diffY = getDiffY(toBlock, fromBlock);
+        for (int indX = diffX, indY = diffY; indX != (toBlock.getRowCount() - fromBlock.getRowCount()); indX += diffX, indY += diffY) {
+            int row = fromBlock.getRowCount() + indX;
+            int col = fromBlock.getColumnCount() + indY;
             Block bl = blocks[row][col];
             if (bl.getSoldier() != null) return false;
         }
         return true;
     }
 
-    private boolean canMoveOnLeftSlant(Block block, Block[][] blocks, Block fromBlock) {
-        if ((block.getColumnCount() - fromBlock.getColumnCount() == fromBlock.getRowCount() - block.getRowCount()))
-            return false;
+    private int getDiffX(Block toBlock, Block fromBlock) {
+        return toBlock.getRowCount() - fromBlock.getRowCount() < 0 ? -1 : 1;
+    }
 
-        int multiplier = block.getRowCount() > fromBlock.getRowCount() ? 1 : -1;
-        for (int index = multiplier; index != (block.getRowCount() - fromBlock.getRowCount()); index += multiplier) {
-            int row = fromBlock.getRowCount() + index;
-            int col = fromBlock.getColumnCount() + index * multiplier;
-            Block bl = blocks[row][col];
-            if (bl.getSoldier() != null) return false;
-        }
-        return true;
+    private int getDiffY(Block toBlock, Block fromBlock) {
+        return toBlock.getColumnCount() - fromBlock.getColumnCount() < 0 ? -1 : 1;
     }
 
     private boolean isOnSlant(Block toBlock, Block fromBlock) {

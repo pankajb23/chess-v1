@@ -10,7 +10,8 @@ public class PawnMoves implements Move {
 
     @Override
     public boolean canMoveToFrom(Block toBlock, Block[][] blocks, Block fromBlock) {
-        if (toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType()) return false;
+        if (toBlock.getSoldier() != null && toBlock.getSoldier().getPlayerType() == fromBlock.getSoldier().getPlayerType())
+            return false;
 
         return isOnlyForwardMove(toBlock, fromBlock) || (SlantToKill(toBlock, fromBlock));
     }
